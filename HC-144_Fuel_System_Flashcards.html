@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HC-144 Fuel System Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #378ADD;
+            transition: width 0.3s ease;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .controls button {
+            padding: 10px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #333;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .controls button:hover {
+            background: #f5f5f5;
+            border-color: #bbb;
+        }
+        
+        .controls button.active {
+            background: #378ADD;
+            color: white;
+            border-color: #378ADD;
+        }
+        
+        .card-counter {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 40px;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+        
+        .card:hover {
+            border-color: #378ADD;
+            box-shadow: 0 4px 12px rgba(55, 138, 221, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card.flipped {
+            background: #f9f9f9;
+            border-color: #378ADD;
+        }
+        
+        .card-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .card-label.warning {
+            color: #E24B4A;
+        }
+        
+        .card-label.caution {
+            color: #BA7517;
+        }
+        
+        .card-label.operation {
+            color: #378ADD;
+        }
+        
+        .card-content {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            text-align: center;
+            line-height: 1.8;
+        }
+        
+        .card.flipped .card-content {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.9;
+            color: #444;
+        }
+        
+        #tagContainer {
+            margin-top: 16px;
+        }
+        
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #333;
+            background: #f0f0f0;
+            font-weight: 500;
+        }
+        
+        .tag.warning {
+            background: rgba(226, 75, 74, 0.1);
+            color: #E24B4A;
+        }
+        
+        .tag.caution {
+            background: rgba(186, 117, 23, 0.1);
+            color: #BA7517;
+        }
+        
+        .tag.operation {
+            background: rgba(55, 138, 221, 0.1);
+            color: #378ADD;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .navigation button {
+            padding: 12px 24px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.2s;
+        }
+        
+        .navigation button:hover:not(:disabled) {
+            background: #f5f5f5;
+            border-color: #378ADD;
+            color: #378ADD;
+        }
+        
+        .navigation button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HC-144 Fuel System</h1>
+            <p>Complete Flashcard Study Deck - 46 Cards</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="active" id="allBtn" onclick="filterCards('all')">All</button>
+            <button id="overviewBtn" onclick="filterCards('overview')">Overview</button>
+            <button id="operationBtn" onclick="filterCards('operation')">Operation</button>
+            <button id="warningBtn" onclick="filterCards('warning')">Warnings</button>
+            <button id="cautionBtn" onclick="filterCards('caution')">Cautions</button>
+            <span class="card-counter"><span id="current">1</span> / <span id="total">46</span></span>
+        </div>
+
+        <div class="card" id="card" onclick="flipCard()">
+            <div class="card-label" id="cardLabel">Question</div>
+            <div class="card-content" id="cardContent"></div>
+            <div id="tagContainer"></div>
+        </div>
+
+        <div class="navigation">
+            <button onclick="previousCard()" id="prevBtn">← Previous</button>
+            <button onclick="nextCard()" id="nextBtn">Next →</button>
+        </div>
+        
+        <div class="footer">
+            <p>HC-144 Flight Manual (Dash 1) & Emergency Procedures (Red Book) - CGTO 1C-144B-1</p>
+            <p>Study Deck Created: 2026</p>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            // SYSTEM OVERVIEW - TANKS
+            { category: 'overview', type: '', question: 'How many fuel tanks does the HC-144 have and what is the total usable capacity?', answer: 'Four tanks forming integral part of wing structure: two main tanks and two auxiliary tanks. Total usable capacity is approximately 9,250 lb.' },
+            { category: 'overview', type: '', question: 'What is the usable fuel capacity of each main tank?', answer: 'Each main tank: 1,800 lb usable (capacity is 1,830 lb through pressure refueling, up to 2,000 lb with gravity fueling).' },
+            { category: 'overview', type: '', question: 'What is the usable fuel capacity of each auxiliary tank?', answer: 'Each auxiliary tank: 2,806 lb usable (total capacity is 2,820 lb, almost all of which is usable).' },
+            { category: 'overview', type: '', question: 'Where is each main tank located on the aircraft?', answer: 'Between the fuselage and the corresponding engine nacelle, between the two main wing spars.' },
+            { category: 'overview', type: '', question: 'Where is each auxiliary tank located on the aircraft?', answer: 'Extends from the corresponding nacelle to the halfway point of the outer wing between the two main spars.' },
+            { category: 'overview', type: '', question: 'What is inside each main tank collector box?', answer: 'A submerged pump with filter on intake and check valve on outlet. The collector box always has fuel, though long-term fuel displacements can occur.' },
+            
+            // SYSTEM OVERVIEW - DISTRIBUTION
+            { category: 'overview', type: '', question: 'What is the normal fuel feeding arrangement for the engines?', answer: 'Normally, each engine feeds from its main tank on the same side. One main tank can feed both engines through a crossfeed valve.' },
+            { category: 'overview', type: '', question: 'How does fuel transfer from auxiliary to main tank?', answer: 'Either through a submerged transfer pump (pressure transfer) or by gravity transfer valve. The transfer pump uses a venturi valve to draw fuel from the auxiliary tank.' },
+            { category: 'overview', type: '', question: 'What does the submerged pump accomplish when energized?', answer: 'Takes fuel from main tank through filter and check valve to venturi valve. Low pressure from venturi draws fuel from auxiliary tank and sends all fuel to main tank.' },
+            { category: 'overview', type: '', question: 'How is fuel flow assured to the engine even with the pump off?', answer: 'Wing is above feed line and engine has suction pump. Fuel enters through filter and exits through valve without passing through pump body.' },
+            
+            // SYSTEM OVERVIEW - VENTING
+            { category: 'overview', type: '', question: 'What is the purpose of each wing ventilation system?', answer: 'Pressurizes fuel tanks inflight via aerodynamic NACA scoop and allows air to displace fuel as it is used.' },
+            { category: 'overview', type: '', question: 'What do vent valve floats do in main and auxiliary tanks?', answer: 'Float closes ventilation system when tank is full to prevent fuel spillage from vents. When tanks not full, valves open to allow air passage.' },
+            { category: 'overview', type: '', question: 'What is the purpose of safety valves in main tanks?', answer: 'Discharge fuel from lower surface of wing in case of tank overpressurization. Also serves as connection point to empty tanks by gravity when on ground.' },
+            
+            // SYSTEM OVERVIEW - REFUELING & INDICATION
+            { category: 'overview', type: '', question: 'What is the maximum refueling pressure allowed?', answer: '45 ±5 psi.' },
+            { category: 'overview', type: '', question: 'What must be filled first during refueling?', answer: 'Main tanks must be filled prior to auxiliary tanks.' },
+            { category: 'overview', type: '', question: 'How is fuel temperature measured and displayed?', answer: 'Left main tank has fuel temperature sensor. F TEMP indication shows fuel temperature from left main tank on IEDS.' },
+            { category: 'overview', type: '', question: 'How many capacitors measure fuel quantity in each tank?', answer: 'Three capacitors in each auxiliary tank and two capacitors in each main tank. Signal sent to conditioning unit that accounts for fuel density.' },
+            { category: 'overview', type: '', question: 'Where is the fuel quantity displayed?', answer: 'On IEDS in cockpit (showing individual tank and total quantity) and on refueling panel in RH main landing gear fairing.' },
+            
+            // OPERATIONS - PUMP OPERATION
+            { category: 'operation', type: '', question: 'When should fuel pumps be on for takeoff and landing?', answer: 'Fuel pumps shall be ON for takeoff and landing.' },
+            { category: 'operation', type: '', question: 'When should fuel pumps remain ON during flight?', answer: 'During normal cruise flight, fuel pumps remain ON until respective auxiliary tank is empty.' },
+            { category: 'operation', type: '', question: 'What indicates the PRESS XFR visual indicator bar illumination?', answer: 'Sufficient pump pressure for fuel transfer from auxiliary tank to main tank is available.' },
+            { category: 'operation', type: '', question: 'What triggers the minimum level pump to start automatically?', answer: 'When less than 275 lb of fuel remains in a main tank, the 1 FUEL LOW or 2 FUEL LOW caution illuminates and minimum level pump starts automatically.' },
+            { category: 'operation', type: '', question: 'What is the purpose of the minimum level pump?', answer: 'To ensure the main pump has fuel until all fuel is used.' },
+            
+            // OPERATIONS - FUEL TRANSFER
+            { category: 'operation', type: '', question: 'What is the maximum fuel asymmetry allowed for aircraft weight up to 31,970 lb?', answer: 'Main tanks: 1,200 lb. Auxiliary tanks: 500 lb when main tanks in balance, reduced by 100 lb for each 240 lb main tanks out of balance.' },
+            { category: 'operation', type: '', question: 'What is the maximum fuel asymmetry allowed for aircraft weight 31,970 to 35,280 lb?', answer: 'Main tanks: 500 lb. Auxiliary tanks: 220 lb when main tanks in balance, reduced by 100 lb for each 240 lb main tanks out of balance.' },
+            { category: 'operation', type: '', question: 'What is the maximum fuel asymmetry allowed for aircraft weight above 35,280 lb?', answer: 'Main tanks: 160 lb. Auxiliary tanks: 60 lb when main tanks in balance, otherwise 0.' },
+            { category: 'operation', type: '', question: 'What happens if main tank fuel is greater than auxiliary tank fuel with gravity valve open?', answer: 'Fuel will flow from main to auxiliary tank instead of the normal direction.' },
+            
+            // RED BOOK WARNINGS
+            { category: 'warning', type: 'FUEL PRESSURE LOW', question: 'What does 1 FUEL P or 2 FUEL P warning indicate?', answer: 'Low fuel pressure detected downstream of engine-driven boost pump. Causes may include fuel starvation, system blockage, boost pump failure, or transducer failure.' },
+            { category: 'warning', type: 'FUEL PRESSURE LOW', question: 'What does simultaneous 1 FUEL P and 2 FUEL P warning suggest?', answer: 'Could indicate fuel contamination.' },
+            { category: 'warning', type: 'FUEL PRESSURE LOW', question: 'What is the procedure if FUEL P warning does not extinguish after turning fuel pumps ON?', answer: 'Land as soon as practical. If warning persists after crossfeed is turned ON, land as soon as practical.' },
+            { category: 'warning', type: 'FUEL PRESSURE LOW', question: 'What is the CRITICAL WARNING when fuel pump fails?', answer: 'Do not crossfeed fuel when a fuel leak is present or suspected.' },
+            
+            { category: 'caution', type: 'FUEL LOW', question: 'What does 1 FUEL LOW or 2 FUEL LOW caution indicate?', answer: 'Less than 275 lb of fuel remains in corresponding main tank.' },
+            { category: 'caution', type: 'FUEL LOW', question: 'What does the minimum level pump do when FUEL LOW illuminates?', answer: 'Automatically activates to scavenge residual fuel from the main tank.' },
+            { category: 'caution', type: 'FUEL LOW', question: 'What is the CRITICAL WARNING during low fuel conditions?', answer: 'Abrupt attitude changes may cause engine flameout.' },
+            
+            { category: 'caution', type: 'FUEL COLD', question: 'What does 1 FUEL C or 2 FUEL C caution indicate?', answer: 'Fuel temperature at heat exchanger outlet is <3 °C.' },
+            { category: 'caution', type: 'FUEL COLD', question: 'How does the fuel warming system work during cold weather?', answer: 'Turning ON fuel pumps warms fuel by mechanical action prior to entering fuel/oil heater.' },
+            { category: 'caution', type: 'FUEL COLD', question: 'Is FUEL C caution normal during cold weather operations?', answer: 'YES, during prolonged flight where OAT is below freezing. The fuel/oil heater will warm fuel above freezing prior to fuel manifold. Also normal during cold engine starts for a few moments.' },
+            
+            { category: 'caution', type: 'FUEL FILTER BYPASS', question: 'What does 1 FUEL F or 2 FUEL F caution indicate?', answer: 'Fuel is bypassing fuel filter, allowing unfiltered fuel into affected engine. May be caused by ice or fuel contamination blocking fuel passage through filter.' },
+            { category: 'caution', type: 'FUEL FILTER BYPASS', question: 'Is FUEL F caution normal during cold engine start?', answer: 'YES, illumination during engine start in cold weather is normal and should extinguish once oil temperature reaches about 40 °C.' },
+            { category: 'caution', type: 'FUEL FILTER BYPASS', question: 'What is the procedure if FUEL F caution does not extinguish?', answer: 'Retard power lever until caution extinguishes. Operate at power settings that keep FUEL F extinguished. If unable, land as soon as possible. Be prepared for engine flameout.' },
+            
+            { category: 'warning', type: 'FUEL TRANSFER FAIL', question: 'How do you detect fuel transfer system failure?', answer: 'Fuel pump ON, main tank fuel level decreases while auxiliary tank level remains same with quantity >100 lb indicates failure.' },
+            { category: 'warning', type: 'FUEL TRANSFER FAIL', question: 'What is the first recovery action for fuel transfer failure?', answer: 'Turn fuel pump OFF and GRAVITY XFR ON. Check for transfer of fuel from AUX to main tank.' },
+            { category: 'warning', type: 'FUEL TRANSFER FAIL', question: 'What is the CRITICAL WARNING for unbalanced flight during gravity transfer?', answer: 'Unbalanced flight in incorrect direction will cause depletion of main tank and engine flameout.' },
+        ];
+
+        let currentIndex = 0;
+        let filteredCards = [...flashcards];
+        let isFlipped = false;
+
+        function displayCard() {
+            isFlipped = false;
+            const card = filteredCards[currentIndex];
+            document.getElementById('cardLabel').textContent = card.type ? `${card.type} - Question` : 'Question';
+            if (card.category === 'warning') {
+                document.getElementById('cardLabel').classList.add('warning');
+                document.getElementById('cardLabel').classList.remove('caution', 'operation');
+            } else if (card.category === 'caution') {
+                document.getElementById('cardLabel').classList.add('caution');
+                document.getElementById('cardLabel').classList.remove('warning', 'operation');
+            } else if (card.category === 'operation') {
+                document.getElementById('cardLabel').classList.add('operation');
+                document.getElementById('cardLabel').classList.remove('warning', 'caution');
+            } else {
+                document.getElementById('cardLabel').classList.remove('warning', 'caution', 'operation');
+            }
+            document.getElementById('cardContent').textContent = card.question;
+            document.getElementById('card').classList.remove('flipped');
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = filteredCards.length;
+            updateProgress();
+            updateButtons();
+            updateTag(card.category, card.type);
+        }
+
+        function updateTag(category, type) {
+            const tagContainer = document.getElementById('tagContainer');
+            if (isFlipped && type) {
+                tagContainer.innerHTML = `<div class="tag ${category}">${type}</div>`;
+            } else {
+                tagContainer.innerHTML = '';
+            }
+        }
+
+        function flipCard() {
+            if (isFlipped) {
+                displayCard();
+            } else {
+                isFlipped = true;
+                const card = filteredCards[currentIndex];
+                document.getElementById('cardLabel').textContent = card.type ? `${card.type} - Answer` : 'Answer';
+                document.getElementById('cardContent').textContent = card.answer;
+                document.getElementById('card').classList.add('flipped');
+                updateTag(card.category, card.type);
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < filteredCards.length - 1) {
+                currentIndex++;
+                displayCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayCard();
+            }
+        }
+
+        function filterCards(category) {
+            document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+            if (category === 'all') {
+                filteredCards = [...flashcards];
+                document.getElementById('allBtn').classList.add('active');
+            } else if (category === 'overview') {
+                filteredCards = flashcards.filter(c => c.category === 'overview');
+                document.getElementById('overviewBtn').classList.add('active');
+            } else if (category === 'operation') {
+                filteredCards = flashcards.filter(c => c.category === 'operation');
+                document.getElementById('operationBtn').classList.add('active');
+            } else if (category === 'warning') {
+                filteredCards = flashcards.filter(c => c.category === 'warning');
+                document.getElementById('warningBtn').classList.add('active');
+            } else if (category === 'caution') {
+                filteredCards = flashcards.filter(c => c.category === 'caution');
+                document.getElementById('cautionBtn').classList.add('active');
+            }
+            currentIndex = 0;
+            displayCard();
+        }
+
+        function updateProgress() {
+            const percent = ((currentIndex + 1) / filteredCards.length) * 100;
+            document.getElementById('progress').style.width = percent + '%';
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1;
+        }
+
+        displayCard();
+    </script>
+</body>
+</html>

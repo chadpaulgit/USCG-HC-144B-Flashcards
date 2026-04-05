@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HC-144 Electrical System Flashcards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 30px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
+        .header h1 { font-size: 28px; color: #333; margin-bottom: 8px; }
+        .header p { color: #666; font-size: 14px; }
+        .progress-bar { height: 4px; background: #f0f0f0; border-radius: 2px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #378ADD; transition: width 0.3s ease; }
+        .controls { display: flex; gap: 12px; margin-bottom: 25px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .controls button { padding: 10px 16px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; color: #333; transition: all 0.2s; font-weight: 500; }
+        .controls button:hover { background: #f5f5f5; border-color: #bbb; }
+        .controls button.active { background: #378ADD; color: white; border-color: #378ADD; }
+        .card-counter { font-size: 13px; color: #666; font-weight: 500; }
+        .card { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 40px; min-height: 340px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; margin-bottom: 25px; }
+        .card:hover { border-color: #378ADD; box-shadow: 0 4px 12px rgba(55, 138, 221, 0.15); transform: translateY(-2px); }
+        .card.flipped { background: #f9f9f9; border-color: #378ADD; }
+        .card-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; font-weight: 600; }
+        .card-label.warning { color: #E24B4A; }
+        .card-label.caution { color: #BA7517; }
+        .card-content { font-size: 18px; font-weight: 500; color: #333; text-align: center; line-height: 1.8; }
+        .card.flipped .card-content { font-size: 16px; font-weight: 400; line-height: 1.9; color: #444; }
+        #tagContainer { margin-top: 16px; }
+        .tag { display: inline-block; font-size: 11px; padding: 6px 12px; border-radius: 20px; color: #333; background: #f0f0f0; font-weight: 500; }
+        .tag.warning { background: rgba(226, 75, 74, 0.1); color: #E24B4A; }
+        .tag.caution { background: rgba(186, 117, 23, 0.1); color: #BA7517; }
+        .navigation { display: flex; gap: 12px; justify-content: center; }
+        .navigation button { padding: 12px 24px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; color: #333; transition: all 0.2s; }
+        .navigation button:hover:not(:disabled) { background: #f5f5f5; border-color: #378ADD; color: #378ADD; }
+        .navigation button:disabled { opacity: 0.4; cursor: not-allowed; }
+        .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #f0f0f0; font-size: 12px; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HC-144 Electrical System</h1>
+            <p>Complete Flashcard Study Deck - 42 Cards</p>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+        <div class="controls">
+            <button class="active" id="allBtn" onclick="filterCards('all')">All</button>
+            <button id="dcBtn" onclick="filterCards('dc')">DC System</button>
+            <button id="acBtn" onclick="filterCards('ac')">AC System</button>
+            <button id="warningBtn" onclick="filterCards('warning')">Warnings</button>
+            <button id="cautionBtn" onclick="filterCards('caution')">Cautions</button>
+            <span class="card-counter"><span id="current">1</span> / <span id="total">42</span></span>
+        </div>
+        <div class="card" id="card" onclick="flipCard()">
+            <div class="card-label" id="cardLabel">Question</div>
+            <div class="card-content" id="cardContent"></div>
+            <div id="tagContainer"></div>
+        </div>
+        <div class="navigation">
+            <button onclick="previousCard()" id="prevBtn">← Previous</button>
+            <button onclick="nextCard()" id="nextBtn">Next →</button>
+        </div>
+        <div class="footer">
+            <p>HC-144 Flight Manual (Dash 1) & Emergency Procedures (Red Book) - CGTO 1C-144B-1</p>
+            <p>Study Deck Created: 2026</p>
+        </div>
+    </div>
+    <script>
+        const flashcards = [
+            { category: 'dc', type: '', question: 'What is the main power source for DC electrical system?', answer: 'Two starter-generators mounted on each engine accessory gearbox that supply current through MSTR ELEC GEN switch and respective GEN switches. Each supplies 400 amperes continuous, can withstand 500 A for 3 minutes or 600 A for 30 seconds.' },
+            { category: 'dc', type: '', question: 'What are the two main battery buses and their normal operating voltage?', answer: 'BAT BUS 1 and BAT BUS 2, operating at 28 VDC. BAT-GEN magnetic indicator inline = battery and generator buses connected; crossline = disconnected.' },
+            { category: 'dc', type: '', question: 'What is the function of the BAT BUS TIE selector?', answer: 'ON = connects both battery buses together with equal load division. OFF = disconnects buses. AUTO = disconnects but automatically connects if generator fails or bus isolates.' },
+            { category: 'dc', type: '', question: 'How are generators protected from overvoltage and overload?', answer: 'Each generator controlled by Generator Control Unit (GCU) which performs voltage regulation, overvoltage/drop protection, current limitation, overload protection, and ground fault protection.' },
+            { category: 'dc', type: '', question: 'What do backup batteries power when AVIONICS masters are on?', answer: 'Backup batteries deliver 24 VDC to BAT B/U 1 and BAT B/U 2 buses to power avionics equipment in event primary power source is lost.' },
+            { category: 'dc', type: '', question: 'What is the maximum electrical load a single generator can handle continuously?', answer: '400 amperes continuous. Can handle 500 A for 3 minutes or 600 A for 30 seconds.' },
+            { category: 'dc', type: '', question: 'How are HOT BUS bars powered?', answer: 'Energized directly from batteries or from generator buses when powered. If overload on HOT BUS, its circuit breaker opens.' },
+            { category: 'ac', type: '', question: 'How many AC inverters are in the system and what is their capacity?', answer: 'Three inverters (800 VA each), generating 115V and 26V at 400 Hz frequency. Inverters 1 and 2 normally used; standby inverter available as backup.' },
+            { category: 'ac', type: '', question: 'How is AC power supplied to inverters?', answer: 'Inverters energized by pushtiles on AC INVERTERS overhead panel, with current supplied by corresponding battery bus. Standby inverter receives power from GEN BUS 1.' },
+            { category: 'ac', type: '', question: 'What happens if an AC inverter fails?', answer: 'FAIL light on its pushtile and 1 INV or 2 INV caution on IEDS illuminates. Standby inverter can replace failed inverter by pressing STBY pushtile and turning STBY output selector to failed side.' },
+            { category: 'ac', type: '', question: 'Where are AC generators mounted on the aircraft?', answer: 'One AC generator on each Propeller Gearbox (PGB). Connected when MIS MASTER is on and NP above 70%. Provide AC power to mission systems through TRUs and air inlet anti-ice equipment.' },
+            { category: 'dc', type: '', question: 'What are the two TRUs (Transformer Rectifier Units) and their function?', answer: 'TRU 1 and TRU 2 convert AC to DC power. Connected to generator buses; control connection via TRU selector. Output current limited to 300 A. Used if DC generators fail.' },
+            { category: 'warning', type: 'GEN HOT', question: 'What does 1 GEN HOT or 2 GEN HOT warning indicate?', answer: 'Generator has reached unsafe temperature. First action: check/reduce electrical load below 400 amperes. If persists after one reset attempt, disconnect generator and land as soon as practical.' },
+            { category: 'warning', type: 'DC GEN FAIL', question: 'What does 1 DC GEN or 2 DC GEN warning indicate?', answer: 'Corresponding DC generator not supplying power to buses. First action: check/reduce electrical load to below 400 amperes. Allow only two reset attempts. Continue flight if unable to recover.' },
+            { category: 'warning', type: 'DUAL DC GEN FAIL', question: 'What is the CRITICAL WARNING for dual DC generator failure?', answer: 'Do not delay procedure - battery exhaustion can occur in as little as 18 minutes! All DC power from batteries only. Only two reset attempts permitted on each generator.' },
+            { category: 'caution', type: 'AC GEN FAIL', question: 'What does 1 AC GEN or 2 AC GEN caution indicate?', answer: 'AC generator not supplying power to inlet anti-ice and mission systems. Normal below 70% NP with these systems powered. Shutdown mission systems if caution remains. Only one AC GCU reset attempt allowed.' },
+            { category: 'caution', type: 'BAT-GEN', question: 'What does BAT-GEN warning indicate?', answer: 'Battery and generator buses on affected side not connected. Most likely cause is short on battery bus. Critical: do not delay - battery exhaustion can occur in 18 minutes. Only one reset attempt permitted.' },
+            { category: 'warning', type: 'GEN LOAD', question: 'What is the maximum electrical load the remaining generator must handle in single-generator operations?', answer: 'Below 400 amperes. Nonessential loads must be shed to maintain generator below this limit. Refer to nonessential load list.' },
+            { category: 'dc', type: '', question: 'What is included in the nonessential load list for electrical load shedding?', answer: 'Hydraulic pumps (50-120A), Propeller deicing (51A), Windshield heat (45A), Recirculating fan (38A), Landing lights (22A), AC inverters (19A), Fuel pumps (17A), Air conditioning (15A), AOA indicator (11A).' },
+            { category: 'dc', type: '', question: 'When are DC and AC GPU connections used?', answer: 'DC GPU for ground operations to power MISS DC BUS 1 and 2. AC GPU can directly power search radar and MISS DC BUS through TRU. AC GPU power disconnects batteries and generators automatically.' },
+            { category: 'warning', type: 'AC GEN EXTENDED', question: 'What is the WARNING regarding extended flight with single AC generator?', answer: 'Extended flight may result in mechanical failure of AC generator leading to loss of propeller gearbox oil. Closely monitor engine nacelle for signs of visible fluid leaks.' },
+            { category: 'caution', type: 'LOAD MANAGEMENT', question: 'What CAUTION applies when using mission systems with AC generators?', answer: 'Mission systems must be turned off before either AC generator powers main aircraft buses OR engine inlet anti-ice crossfeed connected - either case will overload AC generator.' },
+            { category: 'dc', type: '', question: 'What equipment is lost if GEN BUS 1 fails?', answer: 'Left fuel quantity, TRU 1, Front antiskid, IMFD 1, Navigation systems (DME, ADF, TACAN, DF, IFF), Flight control systems, Left anti-ice, Left engine anti-ice, Propeller deice, Air conditioning, Lighting systems, and others.' },
+            { category: 'dc', type: '', question: 'What equipment is lost if GEN BUS 2 fails?', answer: 'Right fuel quantity, TRU 2, Rear antiskid, IMFD 2, Navigation systems (WX RADAR, VHF), Right anti-ice, Right engine anti-ice, Autopilot, Propeller systems, Air conditioning, and other systems.' },
+            { category: 'dc', type: '', question: 'How many times can a generator be reset in normal operations?', answer: 'DC Generator Failure: Two reset attempts maximum. Generator Hot: One reset attempt after load reduction. AC Generator: One reset attempt maximum (multiple attempts may lead to complete AC GEN failure).' },
+            { category: 'ac', type: '', question: 'What voltage levels do the AC inverters produce?', answer: '115 VAC and 26 VAC at 400 Hz frequency. Three-phase inverters for search radar (115V, 400Hz) and single-phase for mission systems (115V, 400Hz, 1200VA).' },
+            { category: 'dc', type: '', question: 'When should TRU selector be used in generator failure scenarios?', answer: 'When both AC and DC generators are lost and mission system power still required. Select TRU 1 or 2 to power MISS DC BUS buses from battery bus. Limit total load to 300 amperes.' },
+        ];
+
+        let currentIndex = 0, filteredCards = [...flashcards], isFlipped = false;
+
+        function displayCard() {
+            isFlipped = false;
+            const card = filteredCards[currentIndex];
+            document.getElementById('cardLabel').textContent = card.type ? `${card.type} - Question` : 'Question';
+            if (card.category === 'warning') {
+                document.getElementById('cardLabel').classList.add('warning');
+                document.getElementById('cardLabel').classList.remove('caution');
+            } else if (card.category === 'caution') {
+                document.getElementById('cardLabel').classList.add('caution');
+                document.getElementById('cardLabel').classList.remove('warning');
+            } else {
+                document.getElementById('cardLabel').classList.remove('warning', 'caution');
+            }
+            document.getElementById('cardContent').textContent = card.question;
+            document.getElementById('card').classList.remove('flipped');
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = filteredCards.length;
+            updateProgress(); updateButtons(); updateTag(card.category, card.type);
+        }
+
+        function updateTag(category, type) {
+            const tagContainer = document.getElementById('tagContainer');
+            if (isFlipped && type) {
+                tagContainer.innerHTML = `<div class="tag ${category}">${type}</div>`;
+            } else {
+                tagContainer.innerHTML = '';
+            }
+        }
+
+        function flipCard() {
+            if (isFlipped) {
+                displayCard();
+            } else {
+                isFlipped = true;
+                const card = filteredCards[currentIndex];
+                document.getElementById('cardLabel').textContent = card.type ? `${card.type} - Answer` : 'Answer';
+                document.getElementById('cardContent').textContent = card.answer;
+                document.getElementById('card').classList.add('flipped');
+                updateTag(card.category, card.type);
+            }
+        }
+
+        function nextCard() { if (currentIndex < filteredCards.length - 1) { currentIndex++; displayCard(); } }
+        function previousCard() { if (currentIndex > 0) { currentIndex--; displayCard(); } }
+
+        function filterCards(category) {
+            document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+            if (category === 'all') { filteredCards = [...flashcards]; document.getElementById('allBtn').classList.add('active'); }
+            else if (category === 'dc') { filteredCards = flashcards.filter(c => c.category === 'dc'); document.getElementById('dcBtn').classList.add('active'); }
+            else if (category === 'ac') { filteredCards = flashcards.filter(c => c.category === 'ac'); document.getElementById('acBtn').classList.add('active'); }
+            else if (category === 'warning') { filteredCards = flashcards.filter(c => c.category === 'warning'); document.getElementById('warningBtn').classList.add('active'); }
+            else if (category === 'caution') { filteredCards = flashcards.filter(c => c.category === 'caution'); document.getElementById('cautionBtn').classList.add('active'); }
+            currentIndex = 0; displayCard();
+        }
+
+        function updateProgress() { const percent = ((currentIndex + 1) / filteredCards.length) * 100; document.getElementById('progress').style.width = percent + '%'; }
+        function updateButtons() { document.getElementById('prevBtn').disabled = currentIndex === 0; document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1; }
+
+        displayCard();
+    </script>
+</body>
+</html>

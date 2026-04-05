@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HC-144 Flight Controls Flashcards</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%); min-height: 100vh; padding: 20px; }
+        .container { max-width: 700px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); padding: 30px; }
+        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #f0f0f0; padding-bottom: 20px; }
+        .header h1 { font-size: 28px; color: #333; margin-bottom: 8px; }
+        .header p { color: #666; font-size: 14px; }
+        .progress-bar { height: 4px; background: #f0f0f0; border-radius: 2px; margin-bottom: 25px; overflow: hidden; }
+        .progress-fill { height: 100%; background: #378ADD; transition: width 0.3s ease; }
+        .controls { display: flex; gap: 12px; margin-bottom: 25px; align-items: center; flex-wrap: wrap; justify-content: center; }
+        .controls button { padding: 10px 16px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 13px; color: #333; transition: all 0.2s; font-weight: 500; }
+        .controls button:hover { background: #f5f5f5; border-color: #bbb; }
+        .controls button.active { background: #378ADD; color: white; border-color: #378ADD; }
+        .card { background: white; border: 2px solid #e0e0e0; border-radius: 12px; padding: 40px; min-height: 340px; display: flex; flex-direction: column; justify-content: center; align-items: center; cursor: pointer; transition: all 0.3s ease; margin-bottom: 25px; }
+        .card:hover { border-color: #378ADD; box-shadow: 0 4px 12px rgba(55, 138, 221, 0.15); }
+        .card.flipped { background: #f9f9f9; border-color: #378ADD; }
+        .card-label { font-size: 11px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; font-weight: 600; }
+        .card-label.warning { color: #E24B4A; }
+        .card-content { font-size: 18px; font-weight: 500; color: #333; text-align: center; line-height: 1.8; }
+        .card.flipped .card-content { font-size: 16px; font-weight: 400; line-height: 1.9; }
+        .navigation { display: flex; gap: 12px; justify-content: center; }
+        .navigation button { padding: 12px 24px; border: 1px solid #ddd; background: white; border-radius: 8px; cursor: pointer; font-size: 14px; font-weight: 500; color: #333; }
+        .navigation button:disabled { opacity: 0.4; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HC-144 Flight Controls</h1>
+            <p>Complete Flashcard Study Deck - 35 Cards</p>
+        </div>
+        <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+        <div class="controls">
+            <button class="active" id="allBtn" onclick="filterCards('all')">All</button>
+            <button id="primaryBtn" onclick="filterCards('primary')">Primary</button>
+            <button id="flapsBtn" onclick="filterCards('flaps')">Flaps</button>
+            <button id="emergencyBtn" onclick="filterCards('emergency')">Emergency</button>
+            <span style="font-size:13px;color:#666;font-weight:500;"><span id="current">1</span>/<span id="total">35</span></span>
+        </div>
+        <div class="card" id="card" onclick="flipCard()">
+            <div class="card-label" id="cardLabel">Question</div>
+            <div class="card-content" id="cardContent"></div>
+        </div>
+        <div class="navigation">
+            <button onclick="previousCard()" id="prevBtn">← Previous</button>
+            <button onclick="nextCard()" id="nextBtn">Next →</button>
+        </div>
+    </div>
+    <script>
+        const flashcards = [
+            { category: 'primary', question: 'What are the three primary flight control surfaces?', answer: 'Ailerons (roll control), Elevators (pitch control), and Rudder (yaw control).' },
+            { category: 'primary', question: 'How are the primary flight controls operated?', answer: 'Operated by rudder pedals, control columns, and yokes. Pilot (LH) and Copilot (RH) yokes control ailerons and elevators.' },
+            { category: 'primary', question: 'What are the secondary flight control surfaces?', answer: 'Flaps, Aileron trim tabs, Elevator trim tabs, and Rudder trim tab.' },
+            { category: 'primary', question: 'Describe the aileron control system channels.', answer: 'Two independent channels: LH yoke to LH aileron and RH yoke to RH aileron. Connected by two interconnection mechanisms allowing normal operation of both ailerons from either yoke.' },
+            { category: 'primary', question: 'What do ROLL TRIM selectors require to actuate?', answer: 'Two-part switches: must be simultaneously pressed in AND deflected in desired direction. Pilot selector has priority over Copilot selector.' },
+            { category: 'primary', question: 'How many interconnection mechanisms connect the aileron channels?', answer: 'Two interconnection mechanisms. Only ONE required to be connected for both ailerons to operate together. Both must be connected for normal dual control.' },
+            { category: 'primary', question: 'What do aileron servo tabs do?', answer: 'Located at trailing edge of each aileron. Mechanically actuated by aileron deflection to reduce control force needed to move yokes.' },
+            { category: 'primary', question: 'Describe elevator control system channels.', answer: 'Two independent channels: LH column to LH elevator and RH column to RH elevator. Connected by two interconnection mechanisms for normal dual operation.' },
+            { category: 'primary', question: 'What is the function of the elevator servo tab?', answer: 'Located on RH elevator trailing edge. Mechanically actuated by elevator deflection to reduce control force required to move control columns.' },
+            { category: 'primary', question: 'What does the RH ELEV emergency trim actuator do?', answer: 'Provides emergency pitch trim when LH trim fails or ramp is open and normal trim reaches limit.' },
+            { category: 'primary', question: 'How is rudder control achieved?', answer: 'Through interconnected foot pedals that transmit movement by control cables and rods to the rudder.' },
+            { category: 'primary', question: 'What is the function of the rudder servo tab?', answer: 'Located on upper trailing edge of rudder. Mechanically actuated by rudder deflection to reduce pedal deflection force needed.' },
+            { category: 'primary', question: 'How many rudder trim actuator motors exist?', answer: 'Two motors: one for normal operation (pedestal RUDDER TRIM selector) and one for emergency operation (guarded RUDDER selector).' },
+            { category: 'flaps', question: 'What are the four flap positions and their settings?', answer: 'UP (0°), T/OFF (10°), APPR (15°), LNDG (23°).' },
+            { category: 'flaps', question: 'What is the function of the Flap Valve Unit (FVU)?', answer: 'Verifies at least one hydraulic pump is ON and pressure exceeds 1,000 psi. Sends valid signal to flaps ECU if conditions met.' },
+            { category: 'flaps', question: 'How many mechanical actuators drive the flaps?', answer: 'Eight mechanical actuators moved by drive shaft in each wing. Each drive shaft has brake and transducer.' },
+            { category: 'flaps', question: 'What signal does each flap transducer send?', answer: 'Electrical feedback signal corresponding to actual position of flap assembly to flaps ECU. ECU takes average of transducer signals.' },
+            { category: 'flaps', question: 'When do FLAP FAIL and FLAP ASYM annunciators illuminate?', answer: 'Significant difference in flap position between wings, uncommanded flap movement, or no flap movement when commanded. Power unit stops and drive shaft brakes actuate.' },
+            { category: 'flaps', question: 'What does FLAPS SEQ light indicate?', answer: 'Flap Valve Unit signal not valid (pump OFF or pressure under 1,000 psi). Flaps remain at existing position. Extinguishes when FLAPS lever returned to previous position.' },
+            { category: 'emergency', question: 'What WARNING applies if an aileron jams?', answer: 'Do not use autopilot. Force controls against jam with both pilots pushing. May occur from ice buildup in icing conditions.' },
+            { category: 'emergency', question: 'If aileron jam persists, what actions follow?', answer: 'Reduce airspeed below 150 KIAS. Untie roll controls to disconnect interconnection mechanisms. Land as soon as possible.' },
+            { category: 'emergency', question: 'What is FLOATING AILERON and how is it handled?', answer: 'Aileron mechanically disconnected, floating on hinges. Strong roll tendency. Do not use aileron trim (could cause unstable condition). Limit bank to 10 degrees. Make turns away from floating aileron.' },
+            { category: 'emergency', question: 'What WARNING applies to a floating elevator?', answer: 'Elevator mechanically disconnected from flight controls. Both elevators aerodynamically balance - LH outboard edge above stabilizer, RH below. Control columns will match physically connected elevator.' },
+            { category: 'emergency', question: 'If left elevator floats, what trim procedure must be followed?', answer: 'Determine displacement direction. If towards pilots = LH floats. Trim LH (connected) first, then RH (floating) until parallel.' },
+            { category: 'emergency', question: 'What is a JAMMED RUDDER and how is it controlled?', answer: 'Binding in rudder pedals or inability to move pedals. Maintain directional control with ailerons and asymmetric thrust. Do not use autopilot.' },
+            { category: 'emergency', question: 'What WARNING applies to rudder jam?', answer: 'Select runway with crosswind opposite of yaw tendency. Do not use autopilot for remainder of flight. Perform controllability check if needed.' },
+            { category: 'emergency', question: 'What is a FLOATING RUDDER and its control implication?', answer: 'Rudder mechanically disconnected, floats on hinges. Lack of response to pedal input. Do not use rudder trim (could cause uncommanded turn).' },
+            { category: 'emergency', question: 'What WARNING applies to rudder float?', answer: 'Do not use autopilot. Maintain directional control with ailerons and asymmetric thrust. Select runway with minimum crosswind.' },
+            { category: 'emergency', question: 'What happens if elevator trim RUNAWAY occurs?', answer: 'Strong pitch tendency felt. Can be balanced with moderate to high control inputs. Open L ELEV guard to disable normal trim and use emergency trim motor.' },
+            { category: 'emergency', question: 'What happens if aileron trim RUNAWAY occurs?', answer: 'Strong roll tendency felt. Balanced with moderate to high aileron inputs. Apply opposite yoke trim. If persists, use AILERON EMER TRIM selector.' },
+            { category: 'emergency', question: 'What happens if rudder trim RUNAWAY occurs?', answer: 'Strong yaw tendency felt. Balanced with moderate to high rudder inputs. Apply opposite trim. If persists, open RUDDER guard for emergency operation.' },
+            { category: 'primary', question: 'What does PITCH control disconnect selector do when UNTIED?', answer: 'Opens interconnection mechanisms separating two elevator actuation channels. CP PITCH TRIM now controls RH trim tab. Flight control inputs must be larger.' },
+            { category: 'primary', question: 'What does ROLL control disconnect selector do when UNTIED?', answer: 'Opens two interconnection mechanisms separating aileron actuation channels. CP ROLL TRIM controls RH aileron trim tab. Strong yoke rotation expected.' },
+            { category: 'emergency', question: 'What WARNING applies when pitch controls are untied?', answer: 'Untying will produce fore or AFT displacement of free control column. Flight controls must be held firmly for remainder of flight.' },
+            { category: 'emergency', question: 'If both roll controls jam, what is the critical recovery procedure?', answer: 'Untie ROLL controls to disconnect mechanisms. Operate freely connected aileron through corresponding yoke. Monitor FWD AIL and REAR AIL indicators for confirmation.' },
+        ];
+
+        let currentIndex = 0, filteredCards = [...flashcards], isFlipped = false;
+
+        function displayCard() {
+            isFlipped = false;
+            const card = filteredCards[currentIndex];
+            document.getElementById('cardLabel').textContent = 'Question';
+            document.getElementById('cardContent').textContent = card.question;
+            document.getElementById('card').classList.remove('flipped');
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = filteredCards.length;
+            updateProgress(); updateButtons();
+        }
+
+        function flipCard() {
+            if (isFlipped) displayCard();
+            else {
+                isFlipped = true;
+                document.getElementById('cardLabel').textContent = 'Answer';
+                document.getElementById('cardContent').textContent = filteredCards[currentIndex].answer;
+                document.getElementById('card').classList.add('flipped');
+            }
+        }
+
+        function nextCard() { if (currentIndex < filteredCards.length - 1) { currentIndex++; displayCard(); } }
+        function previousCard() { if (currentIndex > 0) { currentIndex--; displayCard(); } }
+
+        function filterCards(category) {
+            document.querySelectorAll('.controls button').forEach(b => b.classList.remove('active'));
+            if (category === 'all') { filteredCards = [...flashcards]; document.getElementById('allBtn').classList.add('active'); }
+            else if (category === 'primary') { filteredCards = flashcards.filter(c => c.category === 'primary'); document.getElementById('primaryBtn').classList.add('active'); }
+            else if (category === 'flaps') { filteredCards = flashcards.filter(c => c.category === 'flaps'); document.getElementById('flapsBtn').classList.add('active'); }
+            else if (category === 'emergency') { filteredCards = flashcards.filter(c => c.category === 'emergency'); document.getElementById('emergencyBtn').classList.add('active'); }
+            currentIndex = 0; displayCard();
+        }
+
+        function updateProgress() { document.getElementById('progress').style.width = ((currentIndex + 1) / filteredCards.length) * 100 + '%'; }
+        function updateButtons() { document.getElementById('prevBtn').disabled = currentIndex === 0; document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1; }
+
+        displayCard();
+    </script>
+</body>
+</html>

@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HC-144 Hydraulic System Flashcards</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+            padding-bottom: 20px;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: #f0f0f0;
+            border-radius: 2px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: #378ADD;
+            transition: width 0.3s ease;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 25px;
+            align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .controls button {
+            padding: 10px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            color: #333;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .controls button:hover {
+            background: #f5f5f5;
+            border-color: #bbb;
+        }
+        
+        .controls button.active {
+            background: #378ADD;
+            color: white;
+            border-color: #378ADD;
+        }
+        
+        .card-counter {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+        
+        .card {
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 40px;
+            min-height: 340px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 25px;
+        }
+        
+        .card:hover {
+            border-color: #378ADD;
+            box-shadow: 0 4px 12px rgba(55, 138, 221, 0.15);
+            transform: translateY(-2px);
+        }
+        
+        .card.flipped {
+            background: #f9f9f9;
+            border-color: #378ADD;
+        }
+        
+        .card-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        .card-label.warning {
+            color: #E24B4A;
+        }
+        
+        .card-label.caution {
+            color: #BA7517;
+        }
+        
+        .card-label.operation {
+            color: #378ADD;
+        }
+        
+        .card-content {
+            font-size: 18px;
+            font-weight: 500;
+            color: #333;
+            text-align: center;
+            line-height: 1.8;
+        }
+        
+        .card.flipped .card-content {
+            font-size: 16px;
+            font-weight: 400;
+            line-height: 1.9;
+            color: #444;
+        }
+        
+        #tagContainer {
+            margin-top: 16px;
+        }
+        
+        .tag {
+            display: inline-block;
+            font-size: 11px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            color: #333;
+            background: #f0f0f0;
+            font-weight: 500;
+        }
+        
+        .tag.warning {
+            background: rgba(226, 75, 74, 0.1);
+            color: #E24B4A;
+        }
+        
+        .tag.caution {
+            background: rgba(186, 117, 23, 0.1);
+            color: #BA7517;
+        }
+        
+        .tag.operation {
+            background: rgba(55, 138, 221, 0.1);
+            color: #378ADD;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+        }
+        
+        .navigation button {
+            padding: 12px 24px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            transition: all 0.2s;
+        }
+        
+        .navigation button:hover:not(:disabled) {
+            background: #f5f5f5;
+            border-color: #378ADD;
+            color: #378ADD;
+        }
+        
+        .navigation button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #f0f0f0;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>HC-144 Hydraulic System</h1>
+            <p>Complete Flashcard Study Deck - 53 Cards</p>
+        </div>
+        
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress"></div>
+        </div>
+        
+        <div class="controls">
+            <button class="active" id="allBtn" onclick="filterCards('all')">All</button>
+            <button id="overviewBtn" onclick="filterCards('overview')">Overview</button>
+            <button id="operationBtn" onclick="filterCards('operation')">Operation</button>
+            <button id="warningBtn" onclick="filterCards('warning')">Warnings</button>
+            <button id="cautionBtn" onclick="filterCards('caution')">Cautions</button>
+            <span class="card-counter"><span id="current">1</span> / <span id="total">53</span></span>
+        </div>
+
+        <div class="card" id="card" onclick="flipCard()">
+            <div class="card-label" id="cardLabel">Question</div>
+            <div class="card-content" id="cardContent"></div>
+            <div id="tagContainer"></div>
+        </div>
+
+        <div class="navigation">
+            <button onclick="previousCard()" id="prevBtn">← Previous</button>
+            <button onclick="nextCard()" id="nextBtn">Next →</button>
+        </div>
+        
+        <div class="footer">
+            <p>HC-144 Flight Manual (Dash 1) & Emergency Procedures (Red Book) - CGTO 1C-144B-1</p>
+            <p>Study Deck Created: 2026</p>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            // ORIGINAL SYSTEM OVERVIEW CARDS
+            { category: 'overview', subsection: 'system', type: '', question: 'What subsystems does the hydraulic system power?', answer: 'Propeller brake, flaps, landing gear, nosewheel steering, brakes, emergency/parking brake, and cargo door assembly.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'How many electric pumps power the hydraulic system?', answer: 'Two 26 VDC electric pumps connected in parallel.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'What is the hydraulic system operating pressure?', answer: '3,000 psi.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'Where are the reservoir, pumps, and module located?', answer: 'In the aft portion of the right main gear sponson.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'What is the capacity and normal indication of the hydraulic reservoir?', answer: 'Capacity is 2.6 gallons. Normal indication with gear down, cargo door closed, and at least one pump on is about 2 gallons (75%).' },
+            { category: 'overview', subsection: 'system', type: '', question: 'What is the reservoir pressure?', answer: 'About 50 psi.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'What does the hydraulic module contain?', answer: 'All valves and filters (except heat exchanger bypass valves), pressure transducer for outlet pressure, one pressure switch per pump, and connections for filling and testing.' },
+            
+            // ORIGINAL OPERATION CARDS
+            { category: 'operation', subsection: 'operation', type: '', question: 'Describe the pump cooling system.', answer: 'Each pump has a variable displacement mechanism with an electric motor and hydraulic fluid/air heat exchanger. A fan connected to the motor driveshaft pulls air through the heat exchanger to cool the hydraulic fluid.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'What is the dual-port bypass valve function?', answer: 'It bypasses cold fluid below 20°C and provides fluid for internal pump lubrication and cooling.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'What are the two operating modes for the pumps?', answer: 'Manual mode: pumps operated by PUMP pushtiles on the hydraulic control panel. Automatic mode: pumps energized when airspeed is below 160 kt, altitude below 8,000 ft MSL or 2,000 ft AGL, and at least one engine is operative.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'What overpressure protection does the system have?', answer: 'A safety relief valve protects the reservoir low pressure side. A safety discharge valve relieves excess pressure by dumping fluid into the return line if pressure exceeds 3,750 psi.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'What temperature indicator alerts the pilot?', answer: 'The HYD HOT caution annunciator illuminates if hydraulic fluid reaches 100 ±5 °C.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'When does the electric motor automatically disconnect?', answer: 'For overtemperature of the electric motor itself (O.TEMP light illuminates) or when an engine starts. The motor restarts automatically when the condition ceases.' },
+            
+            // ORIGINAL INDICATORS CARDS
+            { category: 'overview', subsection: 'indicators', type: '', question: 'What does the HYD QTY indicator show?', answer: 'The quantity of hydraulic fluid contained in the reservoir as a percentage.' },
+            { category: 'overview', subsection: 'indicators', type: '', question: 'What does the HYD PUMP indicator display?', answer: 'ON illuminated indicates the pump is operating. O.TEMP illuminated indicates electric motor overheating; pump stops and automatically restarts when temperature drops.' },
+            { category: 'overview', subsection: 'indicators', type: '', question: 'What pressure range indicates low pump outlet pressure?', answer: 'Outlet pressure below 1,800 psi triggers the caution. It extinguishes when pressure rises above 2,300 psi.' },
+            { category: 'overview', subsection: 'indicators', type: '', question: 'What does the AUTO-MAN mode selector control?', answer: 'AUTO: Pumps operate in Automatic mode according to switching conditions. MAN: Pumps are controlled by the PUMP pushtiles.' },
+            { category: 'overview', subsection: 'indicators', type: '', question: 'What does the HYD pressure indicator display?', answer: 'System pressure in psi.' },
+
+            // RED BOOK WARNING CARDS
+            { category: 'warning', subsection: '', type: 'HYDRAULIC LEAK', question: 'What is the PRIMARY WARNING for a hydraulic leak situation?', answer: 'DO NOT REENERGIZE HYDRAULIC PUMPS. Hydraulic pressure has been lost to all components.' },
+            { category: 'warning', subsection: '', type: 'HYDRAULIC LEAK', question: 'What are the landing considerations during hydraulic system failure?', answer: 'Land with existing flap setting. If landing gear not down/locked, perform EMERGENCY LANDING GEAR EXTENSION. Nosewheel steering will be unavailable—use rudder, asymmetric thrust, and braking for directional control.' },
+            { category: 'warning', subsection: '', type: 'HYDRAULIC LEAK', question: 'What brake accumulator pressure concern exists during system failure?', answer: 'If less than 3,000 psi available in brake accumulators, full braking ability will not be available. Anticipate reduced braking (see BRAKE FAILURE procedure).' },
+            { category: 'warning', subsection: '', type: 'HYDRAULIC LEAK', question: 'How should you handle antiskid during emergency landing after hydraulic loss?', answer: 'Turn ANTISKID OFF for landing since it may cause rapid drop in brake accumulator pressure. Apply steady braking without skidding tires. Select ANTI-SKID NON-OP for accurate landing distances.' },
+            
+            { category: 'warning', subsection: '', type: 'PROP BRK', question: 'Is brief illumination of PROP BRK warning normal?', answer: 'YES. Illumination for up to 20 seconds during initial activation/deactivation of propeller brake is NORMAL.' },
+            { category: 'warning', subsection: '', type: 'PROP BRK', question: 'What does persistent PROP BRK warning (beyond 20 seconds) indicate?', answer: 'Possible partial braking and rotation of propeller No. 2, which can lead to intense heat and subsequent fire.' },
+            { category: 'warning', subsection: '', type: 'PROP BRK', question: 'What action helps engage the propeller brake microswitch?', answer: 'Move power lever No. 2 forward or AFT of GND IDLE as needed to engage propeller brake microswitch.' },
+
+            // RED BOOK CAUTION CARDS
+            { category: 'caution', subsection: '', type: 'HYD HOT', question: 'What does the HYD HOT caution indicate?', answer: 'Hydraulic fluid has reached an unsafe temperature of 100 ±5 °C (212 °F).' },
+            { category: 'caution', subsection: '', type: 'HYD HOT', question: 'What is the first step when HYD HOT caution illuminates?', answer: 'Turn both hydraulic pumps to MAN and OFF. Complete any configuration changes in progress.' },
+            { category: 'caution', subsection: '', type: 'HYD HOT', question: 'What is the procedure if HYD HOT does NOT extinguish after turning pumps off?', answer: 'When hydraulic pressure is needed, turn Hydraulic Pump No. 1 ON. Do NOT operate more than one hydraulic component at a time with a single pump.' },
+            { category: 'caution', subsection: '', type: 'HYD HOT', question: 'What if HYD HOT remains after switching to pump 1?', answer: 'Turn Pump 1 OFF and Pump 2 ON. If HYD HOT caution does NOT remain extinguished and pressure is NOT normal, land as soon as practical.' },
+            { category: 'caution', subsection: '', type: 'HYD HOT', question: 'CRITICAL: What warning applies if you lose pressure after HYD HOT procedures?', answer: 'DO NOT REENERGIZE HYDRAULIC PUMPS. Hydraulic pressure has been lost to all components.' },
+            
+            { category: 'caution', subsection: '', type: 'HYD PRESSURE LOW', question: 'What does 1 HYD P or 2 HYD P caution indicate?', answer: 'Outlet pressure of corresponding pump is below 1,800 psi. Caution remains illuminated until pressure increases to 2,300 psi.' },
+            { category: 'caution', subsection: '', type: 'HYD PRESSURE LOW', question: 'What are possible causes of low hydraulic pressure?', answer: 'Pump failure, leak, or blockage in the system.' },
+            { category: 'caution', subsection: '', type: 'HYD PRESSURE LOW', question: 'When should you perform HYDRAULIC LEAK procedure?', answer: 'When both 1 HYD P and 2 HYD P cautions illuminate OR when hydraulic quantity is abnormally low.' },
+            { category: 'caution', subsection: '', type: 'HYD PRESSURE LOW', question: 'What if O.TEMP light is illuminated with HYD P caution?', answer: 'HYD P caution is normal and should extinguish once the pump is reconnected.' },
+            { category: 'caution', subsection: '', type: 'HYD PRESSURE LOW', question: 'What is the CAUTION regarding simultaneous hydraulic component actuation?', answer: 'Simultaneous actuation of hydraulic components is NOT RECOMMENDED.' },
+            { category: 'caution', subsection: '', type: 'HYD PRESSURE LOW', question: 'What may occur when operating cargo door with single pump?', answer: 'Intermittent illumination of 1 HYD P or 2 HYD P caution on operative side and sluggish operation may occur.' },
+
+            // ADDITIONAL SYSTEM KNOWLEDGE
+            { category: 'operation', subsection: 'operation', type: '', question: 'What is the brake accumulator capacity threshold for full braking?', answer: 'At least 3,000 psi must be available in brake accumulators to provide full braking ability.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'What is the normal operating pressure range for the propeller brake?', answer: 'At least 2,650 psi is required for brake engagement. Pressure above 2,350 psi prevents PROP BRK caution.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'Can you operate flaps, landing gear, and other systems with only one pump?', answer: 'YES, but operate only ONE hydraulic component at a time when using a single pump to avoid system overload.' },
+            { category: 'operation', subsection: 'operation', type: '', question: 'What should you do with unused hydraulic pumps during single-pump operation?', answer: 'Turn hydraulic pump OFF whenever it is not being used. Turn the same pump ON only when hydraulic pressure is needed.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'What is the purpose of the heat exchanger bypass valve?', answer: 'To bypass cold fluid below 20°C and provide internal pump lubrication and cooling. It operates automatically.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'How are the pump outlet pressures distributed?', answer: 'Each pump outlet leads to separate check valves converging at a common filter before distribution to subsystems.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'What does the pressure transducer in the hydraulic module measure?', answer: 'The joint outlet pressure (after the filter) from the hydraulic pumps.' },
+            { category: 'overview', subsection: 'system', type: '', question: 'How is hydraulic fluid returned to the reservoir?', answer: 'Fluid is returned to the reservoir through the heat exchangers, check valves, and a common filter at low pressure.' },
+        ];
+
+        let currentIndex = 0;
+        let filteredCards = [...flashcards];
+        let isFlipped = false;
+
+        function displayCard() {
+            isFlipped = false;
+            const card = filteredCards[currentIndex];
+            document.getElementById('cardLabel').textContent = card.type ? `${card.type} - Question` : 'Question';
+            if (card.category === 'warning') {
+                document.getElementById('cardLabel').classList.add('warning');
+                document.getElementById('cardLabel').classList.remove('caution', 'operation');
+            } else if (card.category === 'caution') {
+                document.getElementById('cardLabel').classList.add('caution');
+                document.getElementById('cardLabel').classList.remove('warning', 'operation');
+            } else if (card.category === 'operation') {
+                document.getElementById('cardLabel').classList.add('operation');
+                document.getElementById('cardLabel').classList.remove('warning', 'caution');
+            } else {
+                document.getElementById('cardLabel').classList.remove('warning', 'caution', 'operation');
+            }
+            document.getElementById('cardContent').textContent = card.question;
+            document.getElementById('card').classList.remove('flipped');
+            document.getElementById('current').textContent = currentIndex + 1;
+            document.getElementById('total').textContent = filteredCards.length;
+            updateProgress();
+            updateButtons();
+            updateTag(card.category, card.type);
+        }
+
+        function updateTag(category, type) {
+            const tagContainer = document.getElementById('tagContainer');
+            if (isFlipped && type) {
+                tagContainer.innerHTML = `<div class="tag ${category}">${type}</div>`;
+            } else {
+                tagContainer.innerHTML = '';
+            }
+        }
+
+        function flipCard() {
+            if (isFlipped) {
+                displayCard();
+            } else {
+                isFlipped = true;
+                const card = filteredCards[currentIndex];
+                document.getElementById('cardLabel').textContent = card.type ? `${card.type} - Answer` : 'Answer';
+                document.getElementById('cardContent').textContent = card.answer;
+                document.getElementById('card').classList.add('flipped');
+                updateTag(card.category, card.type);
+            }
+        }
+
+        function nextCard() {
+            if (currentIndex < filteredCards.length - 1) {
+                currentIndex++;
+                displayCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                displayCard();
+            }
+        }
+
+        function filterCards(category) {
+            document.querySelectorAll('.controls button').forEach(btn => btn.classList.remove('active'));
+            if (category === 'all') {
+                filteredCards = [...flashcards];
+                document.getElementById('allBtn').classList.add('active');
+            } else if (category === 'overview') {
+                filteredCards = flashcards.filter(c => c.category === 'overview');
+                document.getElementById('overviewBtn').classList.add('active');
+            } else if (category === 'operation') {
+                filteredCards = flashcards.filter(c => c.category === 'operation');
+                document.getElementById('operationBtn').classList.add('active');
+            } else if (category === 'warning') {
+                filteredCards = flashcards.filter(c => c.category === 'warning');
+                document.getElementById('warningBtn').classList.add('active');
+            } else if (category === 'caution') {
+                filteredCards = flashcards.filter(c => c.category === 'caution');
+                document.getElementById('cautionBtn').classList.add('active');
+            }
+            currentIndex = 0;
+            displayCard();
+        }
+
+        function updateProgress() {
+            const percent = ((currentIndex + 1) / filteredCards.length) * 100;
+            document.getElementById('progress').style.width = percent + '%';
+        }
+
+        function updateButtons() {
+            document.getElementById('prevBtn').disabled = currentIndex === 0;
+            document.getElementById('nextBtn').disabled = currentIndex === filteredCards.length - 1;
+        }
+
+        displayCard();
+    </script>
+</body>
+</html>
