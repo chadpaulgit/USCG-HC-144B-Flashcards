@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>USCG First Pilot (FP) Flashcards - COMDTINST M3710.1I</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin: 4px 0;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-bottom: 1px solid #e0e0e0;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .controls-left, .controls-right {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .info-text {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+
+        button {
+            padding: 8px 16px;
+            border: 1px solid #ddd;
+            background: white;
+            color: #333;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        button:hover {
+            background: #f0f0f0;
+            border-color: #999;
+        }
+
+        button.primary {
+            background: #1e3a8a;
+            color: white;
+            border-color: #1e3a8a;
+        }
+
+        button.primary:hover {
+            background: #1e40af;
+            border-color: #1e40af;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .progress-section {
+            padding: 0 30px 15px 30px;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #1e40af;
+            transition: width 0.3s;
+        }
+
+        .card-section {
+            padding: 40px 30px;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            background: white;
+            border: 2px solid #1e3a8a;
+            border-radius: 10px;
+            padding: 30px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            max-width: 700px;
+        }
+
+        .card:hover {
+            box-shadow: 0 8px 24px rgba(30, 58, 138, 0.15);
+            transform: translateY(-2px);
+        }
+
+        .card.flipped {
+            background: #f0f4ff;
+        }
+
+        .card-label {
+            font-size: 11px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .card-content {
+            font-size: 18px;
+            color: #1a1a1a;
+            font-weight: 500;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .flip-hint {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 20px;
+            font-style: italic;
+        }
+
+        .reference-section {
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid #e0e0e0;
+            display: none;
+        }
+
+        .reference-section.visible {
+            display: block;
+        }
+
+        .reference-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .reference-text {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+            font-style: italic;
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+
+        .navigation button {
+            flex: 1;
+            min-width: 120px;
+        }
+
+        .stats {
+            padding: 20px 30px;
+            background: #f8f9fa;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1e3a8a;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .known-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 15px;
+            font-size: 13px;
+            color: #666;
+        }
+
+        .known-checkbox input {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .print-button {
+            background: #10b981;
+            color: white;
+            border-color: #10b981;
+        }
+
+        .print-button:hover {
+            background: #059669;
+            border-color: #059669;
+        }
+
+        @media print {
+            body {
+                background: white;
+                padding: 0;
+            }
+            .container {
+                box-shadow: none;
+                max-width: 100%;
+            }
+            .controls, .stats, .navigation, .known-checkbox {
+                display: none;
+            }
+            .card-section {
+                padding: 20px;
+            }
+            .card {
+                page-break-inside: avoid;
+                border: 2px solid #1e3a8a;
+                margin-bottom: 20px;
+                min-height: 250px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 22px;
+            }
+            .card-content {
+                font-size: 16px;
+            }
+            .controls {
+                flex-direction: column;
+                gap: 10px;
+            }
+            .controls-left, .controls-right {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>USCG First Pilot (FP) Flashcards</h1>
+            <p>COMDTINST M3710.1I - Air Operations Manual</p>
+            <p>First Pilot Restrictions & Authorizations Study Guide</p>
+        </div>
+
+        <div class="controls">
+            <div class="controls-left">
+                <span class="info-text">Card <span id="current-card">1</span> of <span id="total-cards">17</span></span>
+            </div>
+            <div class="controls-right">
+                <button onclick="shuffleCards()">🔀 Shuffle</button>
+                <button onclick="resetDeck()">↻ Reset</button>
+                <button class="print-button" onclick="window.print()">🖨️ Print</button>
+            </div>
+        </div>
+
+        <div class="progress-section">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress-bar" style="width: 5.88%"></div>
+            </div>
+        </div>
+
+        <div class="card-section">
+            <div class="card" id="card" onclick="flipCard()">
+                <div class="card-label" id="card-label">Question</div>
+                <div class="card-content" id="card-content">What is a First Pilot (FP)?</div>
+                <div class="flip-hint">Click card to reveal answer</div>
+                <div class="reference-section" id="reference-section">
+                    <div class="reference-label">Reference</div>
+                    <div class="reference-text" id="reference-text"></div>
+                </div>
+            </div>
+
+            <div class="navigation">
+                <button onclick="previousCard()">← Previous</button>
+                <button class="primary" onclick="flipCard()">Flip Card</button>
+                <button onclick="nextCard()">Next →</button>
+            </div>
+
+            <div class="known-checkbox">
+                <input type="checkbox" id="known-checkbox" onchange="toggleKnown()">
+                <label for="known-checkbox">Mark as known</label>
+            </div>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-number" id="known-count">0</div>
+                <div class="stat-label">Cards Mastered</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="remaining-count">17</div>
+                <div class="stat-label">Cards Remaining</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number" id="progress-percent">6%</div>
+                <div class="stat-label">Progress</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const flashcards = [
+            {
+                q: "What is a First Pilot (FP)?",
+                a: "A pilot who has completed more training and flight hours than a Copilot (CP). First Pilots are eligible to be assigned as Pilot-in-Command (PIC) on most, but not all, flights.",
+                r: "COMDTINST M3710.1I, Chapter 7, Glossary"
+            },
+            {
+                q: "What are the minimum flight hours required to become a First Pilot?",
+                a: "At least 500 hours of total pilot time in military aircraft.",
+                r: "COMDTINST M3710.1I, Chapter 7, Section 3.B.1.c"
+            },
+            {
+                q: "Can a First Pilot be the Pilot-in-Command (PIC)?",
+                a: "Yes, a First Pilot can be assigned as PIC on most flights. However, there are specific restrictions on certain mission types (e.g., IFR departures requiring a departure alternate, and certain passenger flights).",
+                r: "COMDTINST M3710.1I, Chapter 1, Section 2; Chapter 3"
+            },
+            {
+                q: "What is ONE major restriction for First Pilots?",
+                a: "IFR departures which require a departure alternate are NOT authorized for training flights or flights with a FP in command. An Aircraft Commander (AC) must be the PIC for these missions.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section C.6"
+            },
+            {
+                q: "Are First Pilots allowed to conduct training flights under VFR with a Copilot?",
+                a: "Yes, an FP and a CP may be assigned together for training flights under daylight VFR. However, the FP shall not relinquish the pilot's seat to the CP except in an emergency, nor relinquish control when below 500 feet absolute altitude.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section B.1.a(1)"
+            },
+            {
+                q: "What are the minimum pilot requirements for maintenance test flights (fixed-wing)?",
+                a: "An Aircraft Commander (AC) and a First Pilot (FP). A Commanding Officer may authorize a Copilot in lieu of the FP on a calculated risk basis.",
+                r: "COMDTINST M3710.1I, Chapter 4, Section C.5"
+            },
+            {
+                q: "What minimum pilot crew is required for two-pilot aircraft in normal operations?",
+                a: "Either: (1) An AC and a CP, OR (2) Two FPs (First Pilots)",
+                r: "COMDTINST M3710.1I, Chapter 3, Section B.1.a"
+            },
+            {
+                q: "What qualifications must an FP have regarding aircraft systems?",
+                a: "FPs must demonstrate knowledge in: aircraft systems and emergency procedures, aircraft weight and balance, fuel management, ground security of aircraft away from home unit, and requirements/waivers for maintenance flights.",
+                r: "COMDTINST M3710.1I, Chapter 7, Section 3"
+            },
+            {
+                q: "Can a First Pilot fly under Instrument Meteorological Conditions (IMC) alone?",
+                a: "No. For multi-pilot aircraft under IMC, the minimum requirement is an AC and a CP, or two FPs.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section B.1.a"
+            },
+            {
+                q: "What is a requirement for First Pilots before they can be designated as FP?",
+                a: "They must be recommended for the FP designation by the unit Operations Officer or the cognizant Aviation Training Center (ATC) Mobile Training Division.",
+                r: "COMDTINST M3710.1I, Chapter 7, Section 3"
+            },
+            {
+                q: "What are FPs required to complete for initial FP designation?",
+                a: "FPs must: fulfill CP requirements to a more advanced degree, have 500+ hours total pilot time in military aircraft, and complete a written closed-book examination from ATC Mobile Training Division.",
+                r: "COMDTINST M3710.1I, Chapter 7, Section 3"
+            },
+            {
+                q: "What is the primary difference between a First Pilot (FP) and an Aircraft Commander (AC)?",
+                a: "An AC has completed more training and flight hours than an FP and is always eligible to be assigned as PIC. FPs are eligible to be PIC on most, but not all, flights (especially not on flights requiring a departure alternate under IFR or certain high-risk missions).",
+                r: "COMDTINST M3710.1I, Chapter 7, Glossary & Chapter 3"
+            },
+            {
+                q: "Are First Pilots allowed on all passenger flights?",
+                a: "No. An Aircraft Commander (AC) shall be assigned as the PIC on flights scheduled to carry passengers. First Pilots do not have unlimited authority for passenger operations.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section B.1.a"
+            },
+            {
+                q: "What is a specific restriction for First Pilots on IFR flights?",
+                a: "IFR departures which require a departure alternate are NOT authorized for flights with a FP in command. An AC must be the PIC for these missions.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section C.6"
+            },
+            {
+                q: "Can a First Pilot be assigned to air intercept and assault/use of force missions?",
+                a: "No. An AC shall be assigned as the PIC for all air intercept and assault/use of force (AUF) missions.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section B.1.a"
+            },
+            {
+                q: "What is a key restriction for FPs on difficult or unusual missions?",
+                a: "An AC shall be assigned as the PIC of aircraft on difficult or unusual missions. First Pilots do not have the authority to command these specialized mission types.",
+                r: "COMDTINST M3710.1I, Chapter 3, Section B.1.a"
+            },
+            {
+                q: "What is the role of an FP during FP flights?",
+                a: "During FP flights, the FP will occupy the left seat. When an FP is the actual PIC, the PIC will always occupy the right seat and will operate flight controls during demanding flight phases.",
+                r: "AIRSTAMIAINST M3710.1C, Section B.1"
+            }
+        ];
+
+        let currentIndex = 0;
+        let isFlipped = false;
+        let knownCards = new Set();
+        let shuffledIndices = [...Array(flashcards.length).keys()];
+
+        function displayCard() {
+            const cardIdx = shuffledIndices[currentIndex];
+            const card = flashcards[cardIdx];
+
+            document.getElementById('current-card').textContent = currentIndex + 1;
+            document.getElementById('total-cards').textContent = flashcards.length;
+            document.getElementById('progress-percent').textContent = Math.round((currentIndex + 1) / flashcards.length * 100) + '%';
+            document.getElementById('progress-bar').style.width = ((currentIndex + 1) / flashcards.length * 100) + '%';
+
+            document.getElementById('card-label').textContent = isFlipped ? 'Answer' : 'Question';
+            document.getElementById('card-content').textContent = isFlipped ? card.a : card.q;
+            document.getElementById('reference-text').textContent = card.r;
+
+            const refSection = document.getElementById('reference-section');
+            if (isFlipped) {
+                refSection.classList.add('visible');
+            } else {
+                refSection.classList.remove('visible');
+            }
+
+            const cardEl = document.getElementById('card');
+            if (isFlipped) {
+                cardEl.classList.add('flipped');
+            } else {
+                cardEl.classList.remove('flipped');
+            }
+
+            document.getElementById('known-checkbox').checked = knownCards.has(cardIdx);
+            updateStats();
+        }
+
+        function flipCard() {
+            isFlipped = !isFlipped;
+            displayCard();
+        }
+
+        function nextCard() {
+            if (currentIndex < flashcards.length - 1) {
+                currentIndex++;
+                isFlipped = false;
+                displayCard();
+            }
+        }
+
+        function previousCard() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                isFlipped = false;
+                displayCard();
+            }
+        }
+
+        function shuffleCards() {
+            for (let i = shuffledIndices.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledIndices[i], shuffledIndices[j]] = [shuffledIndices[j], shuffledIndices[i]];
+            }
+            currentIndex = 0;
+            isFlipped = false;
+            displayCard();
+        }
+
+        function resetDeck() {
+            shuffledIndices = [...Array(flashcards.length).keys()];
+            currentIndex = 0;
+            isFlipped = false;
+            knownCards.clear();
+            displayCard();
+        }
+
+        function toggleKnown() {
+            const cardIdx = shuffledIndices[currentIndex];
+            if (document.getElementById('known-checkbox').checked) {
+                knownCards.add(cardIdx);
+            } else {
+                knownCards.delete(cardIdx);
+            }
+            updateStats();
+        }
+
+        function updateStats() {
+            const known = knownCards.size;
+            const remaining = flashcards.length - known;
+            document.getElementById('known-count').textContent = known;
+            document.getElementById('remaining-count').textContent = remaining;
+        }
+
+        // Initialize
+        displayCard();
+        updateStats();
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === ' ') {
+                e.preventDefault();
+                flipCard();
+            }
+            if (e.key === 'ArrowRight') {
+                nextCard();
+            }
+            if (e.key === 'ArrowLeft') {
+                previousCard();
+            }
+        });
+    </script>
+</body>
+</html>
